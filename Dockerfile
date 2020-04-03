@@ -18,13 +18,13 @@ RUN apt-get update -q
 RUN apt-get install -y -q mysql-server mysql-client
 
 RUN cd /tmp && \
-wget https://files.phpmyadmin.net/phpMyAdmin/\
+wget -q https://files.phpmyadmin.net/phpMyAdmin/\
 5.0.2/phpMyAdmin-5.0.2-all-languages.tar.gz && \
 tar xf phpMyAdmin-5.0.2-all-languages.tar.gz -C /var/www && \
 mv /var/www/phpMyAdmin-5.0.2-all-languages /var/www/phpmyadmin
 
 RUN cd /tmp && \
-wget https://wordpress.org/wordpress-5.4.tar.gz && \
+wget -q https://wordpress.org/wordpress-5.4.tar.gz && \
 tar xf wordpress-5.4.tar.gz -C /var/www
 
 RUN rm -rf /tmp/*
@@ -47,4 +47,4 @@ COPY ./srcs/run.sh /root/run.sh
 
 WORKDIR /root
 ENTRYPOINT bash
-EXEC ./run.sh
+CMD ["./run.sh"]

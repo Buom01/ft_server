@@ -3,31 +3,35 @@
 function stopall ()
 {
 	echo "One or more services has crashed"
-	service status mysql
-	service status php7.3-fpm
-	service status nginx
+	service mysql status
+	service php7.3-fpm status
+	service nginx status
 	echo "Stopping container"
-	service stop nginx
-	service stop php7.3-fpm
-	service stop mysql
+	service nginx stop
+	service php7.3-fpm stop
+	service mysql stop
 	exit 1
 }
 
-tee /var/log/nginx/error.log &
-tee /var/log/nginx/access.log &
-tee /var/log/mysql/error.log &
-tee /var/log/php7.3-fpm.log &
+touch /var/log/nginx/error.log
+touch /var/log/nginx/access.log
+touch /var/log/mysql/error.log
+touch /var/log/php7.3-fpm.log
+tail -f -n 0 /var/log/nginx/error.log &
+tail -f -n 0 /var/log/nginx/access.log &
+tail -f -n 0 /var/log/mysql/error.log &
+tail -f -n 0 /var/log/php7.3-fpm.log &
 
 echo "Starting services..."
-service start php7.3-fpm || stopall
-service start mysql || stopall
-service start nginx || stopall
+service php7.3-fpm start || stopall
+service mysql start || stopall
+service nginx start || stopall
 echo "Services started !"
 
 while [ 1 ]
 do
-	service status mysql > /dev/null || stopall
-	service status php7.3-fpm > /dev/null || stopall
-	service status nginx > /dev/null || stopall
+	service mysql status > /dev/null || stopall
+	service php7.3-fpm status > /dev/null || stopall
+	service nginx status > /dev/null || stopall
 	sleep 10
 done
