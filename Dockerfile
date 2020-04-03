@@ -2,19 +2,20 @@ FROM debian:buster
 
 
 ENV DEBIAN_FRONTEND noninteractive
+ENV APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE 1
 
-RUN apt update -q && apt upgrade -y -q
-RUN apt install -y -q wget openssl
-RUN apt install -y -q nginx
-RUN apt install -y -q php7.3-fpm php7.3-mysql
+RUN apt-get update -q && apt-get upgrade -y -q
+RUN apt-get install -y -q wget openssl
+RUN apt-get install -y -q nginx
+RUN apt-get install -y -q php7.3-fpm php7.3-mysql
 
 RUN cd /tmp && \
 wget -q https://repo.mysql.com/mysql-apt-config_0.8.9-1_all.deb && \
-apt install -y -q ./mysql-apt-config_0.8.9-1_all.deb 
+apt-get install -y -q ./mysql-apt-config_0.8.9-1_all.deb 
 RUN apt-key adv --keyserver keys.gnupg.net --receive-keys 8C718D3B5072E1F5
-RUN apt update -q
+RUN apt-get update -q
 
-RUN apt install -y -q mysql-server mysql-client
+RUN apt-get install -y -q mysql-server mysql-client
 
 RUN cd /tmp && \
 wget https://files.phpmyadmin.net/phpMyAdmin/\
@@ -46,4 +47,4 @@ COPY ./srcs/run.sh /root/run.sh
 
 WORKDIR /root
 ENTRYPOINT bash
-#EXEC ./run.sh
+EXEC ./run.sh
