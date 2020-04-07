@@ -1,11 +1,13 @@
 FROM debian:buster
 
-
+ENV GENERATESSL 0
+ENV USEINDEX 1
 ENV DEBIAN_FRONTEND noninteractive
 ENV APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE 1
 
+
 RUN apt-get update -q && apt-get upgrade -y -q
-RUN apt-get install -y -q wget openssl
+RUN apt-get install -y -q wget openssl gpp pwgen sudo  
 RUN apt-get install -y -q nginx
 RUN apt-get install -y -q php7.3-fpm php7.3-mysql
 
@@ -27,18 +29,21 @@ RUN cd /tmp && \
 wget -q https://wordpress.org/wordpress-5.4.tar.gz && \
 tar xf wordpress-5.4.tar.gz -C /var/www
 
+RUN ln -s /var/www/phpmyadmin /var/www/wordpress/phpmyadmin
+
 RUN rm -rf /tmp/*
 
 
-COPY ./srcs/nginx/phpmyadmin /etc/nginx/sites-enabled/phpmyadmin
-#COPY ./srcs/nginx/wordpress /etc/nginx/sites-enabled/wordpress
-COPY ./srcs/nginx/nginx.conf /etc/nginx/nginx.conf
+COPY ./srcs/nginx.conf.template /etc/nginx/nginx.conf.template
+COPY ./srcs/wp-config.php.template /root/wp-config.php.template
+COPY ./srcs/wp-config.php.footer /root/wp-config.php.footer
+COPY ./srcs/mysql.sql.template /root/mysql.sql.template
 
 
 VOLUME /etc/ssl
-#VOLUME /data
+VOLUME /var/lib/mysql
+VOLUME /root/persistant
 
-#ENV USEINDEX true
 
 EXPOSE 80
 EXPOSE 443
@@ -46,5 +51,4 @@ EXPOSE 443
 COPY ./srcs/run.sh /root/run.sh
 
 WORKDIR /root
-ENTRYPOINT bash
-CMD ["./run.sh"]
+ENTRYPOINT /root/run.sh 
