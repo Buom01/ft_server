@@ -1,7 +1,7 @@
 FROM debian:buster
 
 ENV ADMIN_PASSWORD 42
-ENV GENERATESSL 0
+ENV GENERATESSL 1
 ENV USEINDEX 1
 
 ENV DEBIAN_FRONTEND noninteractive
@@ -46,9 +46,9 @@ VOLUME /etc/ssl
 VOLUME /var/lib/mysql
 VOLUME /root/persistant
 
-
 EXPOSE 80
 EXPOSE 443
+
 
 STOPSIGNAL SIGTERM
 
