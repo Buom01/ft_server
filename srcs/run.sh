@@ -10,7 +10,11 @@ nginx_access_pre="[$c[1m$c[92mNGINX_ACC$c[0m] "
 mysql_error_pre="[$c[1m$c[93m  MYSQL  $c[0m] "
 php_pre="[$c[1m$c[94m PHP_FPM $c[0m] "
 
-alias genpass="pwgen -s -1 -y -B -r \'"
+
+function genpass()
+{
+	pwgen -s -1 -r \' $1
+}
 
 function stopall ()
 {
