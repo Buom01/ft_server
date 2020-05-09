@@ -11,22 +11,21 @@ RUN apt-get install -y -q wget openssl gpp pwgen sudo
 RUN apt-get install -y -q nginx
 RUN apt-get install -y -q php7.3-fpm php7.3-mysql
 
+COPY ./srcs/mysql-apt-config_0.8.9-1_all.deb /tmp
 RUN cd /tmp && \
-wget -q https://repo.mysql.com/mysql-apt-config_0.8.9-1_all.deb && \
 apt-get install -y -q ./mysql-apt-config_0.8.9-1_all.deb 
 RUN apt-key adv --keyserver keys.gnupg.net --receive-keys 8C718D3B5072E1F5
 RUN apt-get update -q
 
 RUN apt-get install -y -q mysql-server mysql-client
 
+COPY ./srcs/phpMyAdmin-5.0.2-all-languages.tar.gz /tmp/
 RUN cd /tmp && \
-wget -q https://files.phpmyadmin.net/phpMyAdmin/\
-5.0.2/phpMyAdmin-5.0.2-all-languages.tar.gz && \
 tar xf phpMyAdmin-5.0.2-all-languages.tar.gz -C /var/www && \
 mv /var/www/phpMyAdmin-5.0.2-all-languages /var/www/phpmyadmin
 
+COPY ./srcs/wordpress-5.4.tar.gz /tmp/
 RUN cd /tmp && \
-wget -q https://wordpress.org/wordpress-5.4.tar.gz && \
 tar xf wordpress-5.4.tar.gz -C /var/www
 
 RUN ln -s /var/www/phpmyadmin /var/www/wordpress/phpmyadmin
@@ -48,7 +47,9 @@ VOLUME /root/persistant
 EXPOSE 80
 EXPOSE 443
 
+STOPSIGNAL SIGTERM
+
 COPY ./srcs/run.sh /root/run.sh
 
 WORKDIR /root
-ENTRYPOINT /root/run.sh 
+CMD ["bash", "/root/run.sh"]
