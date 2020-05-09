@@ -85,7 +85,7 @@ function initwordpressconfig ()
 	echo "$main_pre Initiating wordpress config..."
 	if [ ! -f ~/persistant/wordpresssalt ]
 	then
-		wget -O ~/persistant/wordpresssalt \
+		wget -q -O ~/persistant/wordpresssalt \
 			https://api.wordpress.org/secret-key/1.1/salt/ || exit 1
 	fi
 
