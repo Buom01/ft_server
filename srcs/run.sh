@@ -71,24 +71,40 @@ function initmysql ()
 
 function initnginxconfig ()
 {
-	echo "$main_pre Writing nginx config..."
+	echo "$main_pre Writing Nginx config..."
 	gpp -DUSEINDEX=$USEINDEX -DUSESSL=$USESSL \
 		/etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf
 }
 
 function initwordpressconfig ()
 {
-	echo "$main_pre Initiating wordpress config..."
-	if [ ! -f ~/persistant/wordpresssalt ]
+	echo "$main_pre Initiating WordPress config..."
+	if [ ! -f ~/persistant/wordpressconfig ]
 	then
-		wget -q -O ~/persistant/wordpresssalt \
-			https://api.wordpress.org/secret-key/1.1/salt/ || exit 1
+		gpp	-DWORDPRESS_PASSOWRD=$WORDPRESS_PASSWORD \
+			-DSALT_A=$(pwgen -s -y -1 64) \
+			-DSALT_B=$(pwgen -s -y -1 64) \
+			-DSALT_C=$(pwgen -s -y -1 64) \
+			-DSALT_D=$(pwgen -s -y -1 64) \
+			-DSALT_E=$(pwgen -s -y -1 64) \
+			-DSALT_F=$(pwgen -s -y -1 64) \
+			-DSALT_G=$(pwgen -s -y -1 64) \
+			-DSALT_H=$(pwgen -s -y -1 64) \
+			./wp-config.php.template > ~/persistant/wordpressconfig
 	fi
 
-	gpp	-DWORDPRESS_PASSOWRD=$WORDPRESS_PASSWORD \
-		./wp-config.php.template > /var/www/wordpress/wp-config.php
-	cat ~/persistant/wordpresssalt >>  /var/www/wordpress/wp-config.php
-	cat ./wp-config.php.footer >> /var/www/wordpress/wp-config.php
+	cp ~/persistant/wordpressconfig /var/www/wordpress/wp-config.php
+}
+
+function initphpmyadmin ()
+{
+	echo "$main_pre Initiating PhpMyAdmin config..."
+	if [ ! -f ~/persistant/phpmyadminconfig ]
+	then
+		gpp	-DBLOWFISH_SECRET=$(pwgen -s -y -1 32) \
+			./config.inc.php.template > ~/persistant/phpmyadminconfig
+	fi
+	cp ~/persistant/phpmyadminconfig /var/www/phpmyadmin/config.inc.php
 }
 
 function printlogs ()
@@ -117,6 +133,7 @@ checkconfig
 initssl
 initnginxconfig
 initwordpressconfig
+initphpmyadmin
 initmysql
 
 printlogs

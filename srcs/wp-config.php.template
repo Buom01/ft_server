@@ -7,3 +7,27 @@ define( 'DB_PASSWORD', 'WORDPRESS_PASSWORD' );
 define( 'DB_HOST', 'localhost' );
 define( 'DB_CHARSET', 'utf8mb4' );
 define( 'DB_COLLATE', '' );
+
+define('AUTH_KEY',         'SALT_A');
+define('SECURE_AUTH_KEY',  'SALT_B');
+define('LOGGED_IN_KEY',    'SALT_C');
+define('NONCE_KEY',        'SALT_D');
+define('AUTH_SALT',        'SALT_E');
+define('SECURE_AUTH_SALT', 'SALT_F');
+define('LOGGED_IN_SALT',   'SALT_G');
+define('NONCE_SALT',       'SALT_H');
+
+
+$table_prefix = 'wp_';
+
+define( 'WP_DEBUG', false );
+
+/* That's all, stop editing! Happy publishing. */
+
+/** Absolute path to the WordPress directory. */
+if ( ! defined( 'ABSPATH' ) ) {
+        define( 'ABSPATH', __DIR__ . '/' );
+}
+
+/** Sets up WordPress vars and included files. */
+require_once ABSPATH . 'wp-settings.php';
