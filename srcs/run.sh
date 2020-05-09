@@ -12,10 +12,6 @@ php_pre="[$c[1m$c[94m PHP_FPM $c[0m] "
 
 function stopall ()
 {
-	echo "$main_pre Stopping... Current status :"
-	service mysql status | sed -u "s/^/$main_pre /"
-	service php7.3-fpm status | sed -u "s/^/$main_pre /"
-	service nginx status | sed -u "s/^/$main_pre /"
 	echo "$main_pre Stopping container..."
 	service nginx stop | sed -u "s/^/$main_pre /"
 	service php7.3-fpm stop | sed -u "s/^/$main_pre /"
