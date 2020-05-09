@@ -32,7 +32,7 @@ function checkconfig ()
 	
 	if [ -z "$WORDPRESS_PASSWORD" ]
 	then
-		export WORDPRESS_PASSWORD=$(pwgen -s -y -1)
+		export WORDPRESS_PASSWORD=$(pwgen -s -y -r \'\" -1)
 	fi
 
 	echo "$main_pre Use index is set to $USEINDEX"	
@@ -82,14 +82,14 @@ function initwordpressconfig ()
 	if [ ! -f ~/persistant/wordpressconfig ]
 	then
 		gpp	-DWORDPRESS_PASSOWRD=$WORDPRESS_PASSWORD \
-			-DSALT_A=$(pwgen -s -y -1 64) \
-			-DSALT_B=$(pwgen -s -y -1 64) \
-			-DSALT_C=$(pwgen -s -y -1 64) \
-			-DSALT_D=$(pwgen -s -y -1 64) \
-			-DSALT_E=$(pwgen -s -y -1 64) \
-			-DSALT_F=$(pwgen -s -y -1 64) \
-			-DSALT_G=$(pwgen -s -y -1 64) \
-			-DSALT_H=$(pwgen -s -y -1 64) \
+			-DSALT_A=$(pwgen -s -y -r \'\" -1 64) \
+			-DSALT_B=$(pwgen -s -y -r \'\" -1 64) \
+			-DSALT_C=$(pwgen -s -y -r \'\" -1 64) \
+			-DSALT_D=$(pwgen -s -y -r \'\" -1 64) \
+			-DSALT_E=$(pwgen -s -y -r \'\" -1 64) \
+			-DSALT_F=$(pwgen -s -y -r \'\" -1 64) \
+			-DSALT_G=$(pwgen -s -y -r \'\" -1 64) \
+			-DSALT_H=$(pwgen -s -y -r \'\" -1 64) \
 			./wp-config.php.template > ~/persistant/wordpressconfig
 	fi
 
@@ -101,7 +101,7 @@ function initphpmyadmin ()
 	echo "$main_pre Initiating PhpMyAdmin config..."
 	if [ ! -f ~/persistant/phpmyadminconfig ]
 	then
-		gpp	-DBLOWFISH_SECRET=$(pwgen -s -y -1 32) \
+		gpp	-DBLOWFISH_SECRET=$(pwgen -s -y -r \'\" -1 32) \
 			./config.inc.php.template > ~/persistant/phpmyadminconfig
 	fi
 	cp ~/persistant/phpmyadminconfig /var/www/phpmyadmin/config.inc.php
